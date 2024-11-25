@@ -31,7 +31,7 @@ nvim_ui_lib_sources = [
 
 nvim_ui_lib = static_library('nvim-ui-lib',
   nvim_ui_lib_sources,
-  dependencies: [spdlog_dep, msgpack_cxx_dep, msgpack_dep, libuv_dep],
+  dependencies: [spdlog_dep, msgpack_cxx_dep, libuv_dep],
   cpp_pch: 'pch/all.hpp',
 )
 

@@ -10,7 +10,7 @@
 #include "Gtk/EventControllerKey.hpp"
 #include "Gtk/Orientation.hpp"
 #include "Gtk/PropagationPhase.hpp"
-#include "Gtk/StyleContext.hpp"
+//#include "Gtk/StyleContext.hpp"
 
 #include <sstream>
 #include <numeric>
@@ -23,7 +23,7 @@
 #include "Gtk/EventControllerKey.ipp"
 #include "Gtk/Fixed.ipp"
 #include "Gtk/Label.ipp"
-#include "Gtk/StyleContext.ipp"
+//#include "Gtk/StyleContext.ipp"
 #endif
 
 
@@ -37,7 +37,8 @@ GGrid::GGrid(Gtk::Fixed grid, GFont &font, Session::AtomicPtrT &session, IWindow
     , _css_provider{Gtk::CssProvider::new_()}
 {
     _grid.set_focusable(true);
-    _grid.get_style_context().add_provider(_css_provider.get(), GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+    gtk_style_context_add_provider_for_display(gdk_display_get_default(), GTK_STYLE_PROVIDER(_css_provider.g_obj()), GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+    //_grid.get_style_context().add_provider(_css_provider.get(), GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 
     Gtk::DrawingArea cursor = Gtk::DrawingArea::new_().g_obj();
     _cursor.reset(new GCursor{cursor, this, _session});
@@ -71,7 +72,7 @@ void GGrid::MeasureCell()
     static const std::string RULER = GetRuler();
 
     Gtk::Label ruler{Gtk::Label::new_("").g_obj()};
-    ruler.get_style_context().add_provider(_css_provider.get(), GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+    //ruler.get_style_context().add_provider(_css_provider.get(), GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
     ruler.set_markup(RULER.c_str());
 
     int width, height;
@@ -121,7 +122,7 @@ void GGrid::UpdateStyle(Session *session)
 
     std::string style = oss.str();
     Logger().debug("Updated CSS Style:\n{}", style);
-    _css_provider.load_from_data(style.data(), -1);
+    _css_provider.load_from_string(style.data());
 
     _UpdatePangoStyles(session);
 
@@ -462,7 +463,7 @@ void GGrid::_UpdateLabels(Session *session)
             t.label.set_sensitive(false);
             t.label.set_can_focus(false);
             t.label.set_focus_on_click(false);
-            t.label.get_style_context().add_provider(_css_provider.get(), GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+            //t.label.get_style_context().add_provider(_css_provider.get(), GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 
             _grid.put(t.label, 0, y);
             new_textures[chunk] = std::move(t);

@@ -8,8 +8,8 @@
 #include "GSettingsDlg.hpp"
 
 #include <Gtk/ApplicationWindow.hpp>
-#include <Gtk/Dialog.hpp>
-#include <Gtk/Entry.hpp>
+//#include <Gtk/Dialog.hpp>
+//#include <Gtk/Entry.hpp>
 #include <Gtk/Fixed.hpp>
 #include <Gtk/IconTheme.hpp>
 #include <Gtk/KeyvalTrigger.hpp>
@@ -19,11 +19,11 @@
 #include <Gtk/Shortcut.hpp>
 #include <Gtk/ShortcutController.hpp>
 #include <Gtk/ShortcutScope.hpp>
-#include <Gtk/StyleContext.hpp>
+//#include <Gtk/StyleContext.hpp>
 #include <Gtk/StyleProvider.hpp>
 #include <Gtk/Window.hpp>
-#include <Gtk/MessageDialog.hpp>
-#include <Gtk/AboutDialog.hpp>
+//#include <Gtk/MessageDialog.hpp>
+//#include <Gtk/AboutDialog.hpp>
 
 #include <iterator>
 #include <msgpack/v1/unpack.hpp>
@@ -34,16 +34,16 @@
 #include <Gtk/Application.ipp>
 #include <Gtk/ApplicationWindow.ipp>
 #include <Gtk/Builder.ipp>
-#include <Gtk/Entry.ipp>
+//#include <Gtk/Entry.ipp>
 #include <Gtk/IconTheme.ipp>
 #include <Gtk/KeyvalTrigger.ipp>
 #include <Gtk/Label.ipp>
 #include <Gtk/NamedAction.ipp>
 #include <Gtk/Shortcut.ipp>
 #include <Gtk/ShortcutController.ipp>
-#include <Gtk/StyleContext.ipp>
-#include <Gtk/MessageDialog.ipp>
-#include <Gtk/AboutDialog.ipp>
+//#include <Gtk/StyleContext.ipp>
+//#include <Gtk/MessageDialog.ipp>
+//#include <Gtk/AboutDialog.ipp>
 #endif
 
 
@@ -78,7 +78,8 @@ GWindow::GWindow(const Gtk::Application &app, Session::AtomicPtrT &session)
 
     _SetupStatusLabel();
 
-    _window.show();
+    //_window.show();
+    _window.present();
 
     _SetupWindowSignals();
 
@@ -163,7 +164,7 @@ void GWindow::_SetupWindowSignals()
 void GWindow::_SetupStatusLabel()
 {
     Gtk::Label status_label{_builder.get_object("status").g_obj()};
-    status_label.get_style_context().add_provider(_grid->GetStyle(), GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+    //status_label.get_style_context().add_provider(_grid->GetStyle(), GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
     status_label.set_visible(false);
 }
 
@@ -174,8 +175,8 @@ void GWindow::CheckSizeAsync()
 
 void GWindow::_CheckSize()
 {
-    int width = _scroll.get_allocated_width();
-    int height = _scroll.get_allocated_height();
+    int width = _scroll.get_width();
+    int height = _scroll.get_height();
     _grid->CheckSize(width, height);
 }
 
@@ -186,8 +187,8 @@ void GWindow::Present()
 
 void GWindow::_Present()
 {
-    int width = _scroll.get_allocated_width();
-    int height = _scroll.get_allocated_height();
+    int width = _scroll.get_width();
+    int height = _scroll.get_height();
     _grid->Present(width, height);
 }
 
@@ -298,43 +299,43 @@ void GWindow::_OnInspectAction(GSimpleAction *, GVariant *)
 
 void GWindow::_OnAboutAction(GSimpleAction *, GVariant *)
 {
-    const char *authors[] = {
-        _("Anatolii Sakhnik https://sakhnik.com"),
-        nullptr
-    };
+    //const char *authors[] = {
+    //    _("Anatolii Sakhnik https://sakhnik.com"),
+    //    nullptr
+    //};
 
-    static Gtk::AboutDialog dlg;
-    if (!dlg.g_obj())
-    {
-        dlg = Gtk::AboutDialog::new_().g_obj();
-        dlg.set_program_name("nvim-ui");
-        dlg.set_title(_("About nvim-ui"));
-        dlg.set_logo_icon_name("nvim-ui");
-        dlg.set_authors(authors);
-        dlg.set_license_type(GTK_LICENSE_MIT_X11);
-        dlg.set_website("https://github.com/sakhnik/nvim-ui");
-        dlg.set_website_label(_("GitHub: sakhnik/nvim-ui"));
-        dlg.set_version(VERSION);
-        std::string CHANGELOG = _("CHANGELOG");
-        std::filesystem::path changelog_dir = ResourceDir::Get("",
-                std::filesystem::path{PREFIX} / DATA_DIR / "doc" / "nvim-ui");
-        auto changelog_path = changelog_dir / "CHANGELOG.html";
-        auto uri = mk_unique_ptr(g_filename_to_uri(changelog_path.generic_string().c_str(), nullptr, nullptr), g_free);
-        Logger().info("Changelog URI is {}", uri.get());
-        std::string comments = _("User interface for <a href=\"https://neovim.io\">Neovim</a>");
-        comments += "\n<a href=\"";
-        comments += uri.get();
-        comments += "\">" + CHANGELOG + "</a>";
-        dlg.set_comments(comments.c_str());
-        dlg.set_copyright("©2022 Anatolii Sakhnik");
-        dlg.set_hide_on_close(true);
+    //static Gtk::AboutDialog dlg;
+    //if (!dlg.g_obj())
+    //{
+    //    dlg = Gtk::AboutDialog::new_().g_obj();
+    //    dlg.set_program_name("nvim-ui");
+    //    dlg.set_title(_("About nvim-ui"));
+    //    dlg.set_logo_icon_name("nvim-ui");
+    //    dlg.set_authors(authors);
+    //    dlg.set_license_type(Gtk::License::mit_x11);
+    //    dlg.set_website("https://github.com/sakhnik/nvim-ui");
+    //    dlg.set_website_label(_("GitHub: sakhnik/nvim-ui"));
+    //    dlg.set_version(VERSION);
+    //    std::string CHANGELOG = _("CHANGELOG");
+    //    std::filesystem::path changelog_dir = ResourceDir::Get("",
+    //            std::filesystem::path{PREFIX} / DATA_DIR / "doc" / "nvim-ui");
+    //    auto changelog_path = changelog_dir / "CHANGELOG.html";
+    //    auto uri = mk_unique_ptr(g_filename_to_uri(changelog_path.generic_string().c_str(), nullptr, nullptr), g_free);
+    //    Logger().info("Changelog URI is {}", uri.get());
+    //    std::string comments = _("User interface for <a href=\"https://neovim.io\">Neovim</a>");
+    //    comments += "\n<a href=\"";
+    //    comments += uri.get();
+    //    comments += "\">" + CHANGELOG + "</a>";
+    //    dlg.set_comments(comments.c_str());
+    //    dlg.set_copyright("©2022 Anatolii Sakhnik");
+    //    dlg.set_hide_on_close(true);
 
-        // The markup isn't enabled for the comments by default, fix this.
-        Gtk::Label comments_label{dlg.get_template_child(GTK_TYPE_ABOUT_DIALOG, "comments_label").g_obj()};
-        comments_label.set_use_markup(true);
-    }
+    //    // The markup isn't enabled for the comments by default, fix this.
+    //    Gtk::Label comments_label{dlg.get_template_child(GTK_TYPE_ABOUT_DIALOG, "comments_label").g_obj()};
+    //    comments_label.set_use_markup(true);
+    //}
 
-    dlg.present();
+    //dlg.present();
 }
 
 namespace {
@@ -388,65 +389,65 @@ void GWindow::_OnSpawnAction(GSimpleAction *, GVariant *)
 
 void GWindow::_OnConnectAction(GSimpleAction *, GVariant *)
 {
-    auto builder = Gtk::Builder::new_from_resource("/org/sakhnik/nvim-ui/gtk/connect-dlg.ui");
-    Gtk::Dialog dlg{builder.get_object("connect_dlg").g_obj()};
-    dlg.set_transient_for(_window);
+    //auto builder = Gtk::Builder::new_from_resource("/org/sakhnik/nvim-ui/gtk/connect-dlg.ui");
+    //Gtk::Dialog dlg{builder.get_object("connect_dlg").g_obj()};
+    //dlg.set_transient_for(_window);
 
-    dlg.on_response(dlg, [this, builder](Gtk::Dialog dlg, gint response) {
-        _OnConnectDlgResponse(dlg, response, builder);
-    });
-    dlg.on_destroy(dlg, [builder](Gtk::Dialog) {
-        builder.unref();
-    });
-    dlg.show();
+    //dlg.on_response(dlg, [this, builder](Gtk::Dialog dlg, gint response) {
+    //    _OnConnectDlgResponse(dlg, response, builder);
+    //});
+    //dlg.on_destroy(dlg, [builder](Gtk::Dialog) {
+    //    builder.unref();
+    //});
+    //dlg.show();
 }
 
-void GWindow::_OnConnectDlgResponse(Gtk::Dialog &dlg, gint response, Gtk::Builder builder)
-{
-    dlg.destroy();
-    if (Gtk::ResponseType::ok != response)
-        return;
-    Gtk::Entry address_entry{builder.get_object("address_entry").g_obj()};
-    Gtk::Entry port_entry{builder.get_object("port_entry").g_obj()};
-
-    const char *address = address_entry.get_text();
-    int port = std::stoi(port_entry.get_text());
-    Logger().info("Connect to {}:{}", address, port);
-
-    try
-    {
-        Session::PtrT session{new SessionTcp(address, port)};
-        _session.store(session);
-        SetError(nullptr);
-        session->SetWindow(this);
-        session->RunAsync();
-    }
-    catch (std::exception &ex)
-    {
-        Logger().error("Failed to spawn: {}", ex.what());
-        SetError(ex.what());
-    }
-    _UpdateActions();
-    _window.set_focus(_grid->GetFixed());
-}
+//void GWindow::_OnConnectDlgResponse(Gtk::Dialog &dlg, gint response, Gtk::Builder builder)
+//{
+//    dlg.destroy();
+//    if (Gtk::ResponseType::ok != response)
+//        return;
+//    Gtk::Entry address_entry{builder.get_object("address_entry").g_obj()};
+//    Gtk::Entry port_entry{builder.get_object("port_entry").g_obj()};
+//
+//    const char *address = address_entry.get_text();
+//    int port = std::stoi(port_entry.get_text());
+//    Logger().info("Connect to {}:{}", address, port);
+//
+//    try
+//    {
+//        Session::PtrT session{new SessionTcp(address, port)};
+//        _session.store(session);
+//        SetError(nullptr);
+//        session->SetWindow(this);
+//        session->RunAsync();
+//    }
+//    catch (std::exception &ex)
+//    {
+//        Logger().error("Failed to spawn: {}", ex.what());
+//        SetError(ex.what());
+//    }
+//    _UpdateActions();
+//    _window.set_focus(_grid->GetFixed());
+//}
 
 void GWindow::_OnDisconnectAction(GSimpleAction *, GVariant *)
 {
-    GtkDialogFlags flags = static_cast<GtkDialogFlags>(GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_MODAL);
-    Gtk::MessageDialog dialog =
-        G_OBJECT(gtk_message_dialog_new(GTK_WINDOW(_window.g_obj()),
-            flags,
-            GTK_MESSAGE_QUESTION,
-            GTK_BUTTONS_YES_NO,
-            _("Are you sure you want to disconnect?")));
-    dialog.on_response(dialog, [&](Gtk::Dialog dlg, gint response) {
-        dlg.destroy();
-        if (response == GTK_RESPONSE_YES)
-        {
+    //GtkDialogFlags flags = static_cast<GtkDialogFlags>(GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_MODAL);
+    //Gtk::MessageDialog dialog =
+    //    G_OBJECT(gtk_message_dialog_new(GTK_WINDOW(_window.g_obj()),
+    //        flags,
+    //        GTK_MESSAGE_QUESTION,
+    //        GTK_BUTTONS_YES_NO,
+    //        _("Are you sure you want to disconnect?")));
+    //dialog.on_response(dialog, [&](Gtk::Dialog dlg, gint response) {
+    //    dlg.destroy();
+    //    if (response == GTK_RESPONSE_YES)
+    //    {
             _SessionEnd();
-        }
-    });
-    dialog.show();
+    //    }
+    //});
+    //dialog.show();
 }
 
 void GWindow::_OnSettingsAction(GSimpleAction *, GVariant *)
